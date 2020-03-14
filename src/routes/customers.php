@@ -17,7 +17,7 @@ $app->add(function ($req, $res, $next) {
 });
 
 // Get All Customers
-$app->get('/api/customers', function(Request $request, Response $response){
+$app->get('/api/BjSPuU51jB', function(Request $request, Response $response){
     $sql = "SELECT * FROM usuarios";
 
     try{
