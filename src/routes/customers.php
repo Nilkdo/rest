@@ -13,11 +13,11 @@ $app->add(function ($req, $res, $next) {
     return $response
             ->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
 });
 
 // Get All Customers
-$app->get('/api/BjSPuU51jB', function(Request $request, Response $response){
+$app->get('/api/todos', function(Request $request, Response $response){
     $sql = "SELECT * FROM usuarios";
 
     try{
@@ -36,10 +36,10 @@ $app->get('/api/BjSPuU51jB', function(Request $request, Response $response){
 });
 
 // Get Single Customer
-$app->get('/api/customer/{id}', function(Request $request, Response $response){
+$app->get('/api/usuarios/{id}', function(Request $request, Response $response){
     $id = $request->getAttribute('id');
 
-    $sql = "SELECT * FROM customers WHERE id = $id";
+    $sql = "SELECT * FROM usuarios WHERE id_usuarios = $id";
 
     try{
         // Get DB Object
@@ -57,17 +57,18 @@ $app->get('/api/customer/{id}', function(Request $request, Response $response){
 });
 
 // Add Customer
-$app->post('/api/customer/add', function(Request $request, Response $response){
-    $first_name = $request->getParam('first_name');
-    $last_name = $request->getParam('last_name');
-    $phone = $request->getParam('phone');
+$app->post('/api/usuarios/add', function(Request $request, Response $response){
+    $id_user = $request->getParam('id_usuarios');
+    $cedula = $request->getParam('cedula');
+    $first_name = $request->getParam('nombre');
+    $last_name = $request->getParam('apellido');
+    $phone = $request->getParam('telefono');
     $email = $request->getParam('email');
-    $address = $request->getParam('address');
-    $city = $request->getParam('city');
-    $state = $request->getParam('state');
+    $address = $request->getParam('direccion');
+    $city = $request->getParam('ciudad');
 
-    $sql = "INSERT INTO customers (first_name,last_name,phone,email,address,city,state) VALUES
-    (:first_name,:last_name,:phone,:email,:address,:city,:state)";
+    $sql = "INSERT INTO usuarios (id_usuarios,cedula,nombre,apellido,telefono,email,direccion,ciudad') VALUES
+    (:nombre,:apellido,:telefono,:email,:direccion,:ciudad)";
 
     try{
         // Get DB Object
@@ -77,63 +78,18 @@ $app->post('/api/customer/add', function(Request $request, Response $response){
 
         $stmt = $db->prepare($sql);
 
-        $stmt->bindParam(':first_name', $first_name);
-        $stmt->bindParam(':last_name',  $last_name);
-        $stmt->bindParam(':phone',      $phone);
+        $stmt->bindParam(':id_usuarios', $id_user);
+        $stmt->bindParam(':cedula', $cedula);
+        $stmt->bindParam(':nombre', $first_name);
+        $stmt->bindParam(':apellido',  $last_name);
+        $stmt->bindParam(':telefono',      $phone);
         $stmt->bindParam(':email',      $email);
-        $stmt->bindParam(':address',    $address);
-        $stmt->bindParam(':city',       $city);
-        $stmt->bindParam(':state',      $state);
+        $stmt->bindParam(':direccion',    $address);
+        $stmt->bindParam(':ciudad',       $city);
 
         $stmt->execute();
 
-        echo '{"notice": {"text": "Customer Added"}';
-
-    } catch(PDOException $e){
-        echo '{"error": {"text": '.$e->getMessage().'}';
-    }
-});
-
-// Update Customer
-$app->put('/api/customer/update/{id}', function(Request $request, Response $response){
-    $id = $request->getAttribute('id');
-    $first_name = $request->getParam('first_name');
-    $last_name = $request->getParam('last_name');
-    $phone = $request->getParam('phone');
-    $email = $request->getParam('email');
-    $address = $request->getParam('address');
-    $city = $request->getParam('city');
-    $state = $request->getParam('state');
-
-    $sql = "UPDATE customers SET
-				first_name 	= :first_name,
-				last_name 	= :last_name,
-                phone		= :phone,
-                email		= :email,
-                address 	= :address,
-                city 		= :city,
-                state		= :state
-			WHERE id = $id";
-
-    try{
-        // Get DB Object
-        $db = new db();
-        // Connect
-        $db = $db->connect();
-
-        $stmt = $db->prepare($sql);
-
-        $stmt->bindParam(':first_name', $first_name);
-        $stmt->bindParam(':last_name',  $last_name);
-        $stmt->bindParam(':phone',      $phone);
-        $stmt->bindParam(':email',      $email);
-        $stmt->bindParam(':address',    $address);
-        $stmt->bindParam(':city',       $city);
-        $stmt->bindParam(':state',      $state);
-
-        $stmt->execute();
-
-        echo '{"notice": {"text": "Customer Updated"}';
+        echo '{"notice": {"text": "Usuario ingresado"}';
 
     } catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -141,10 +97,10 @@ $app->put('/api/customer/update/{id}', function(Request $request, Response $resp
 });
 
 // Delete Customer
-$app->delete('/api/customer/delete/{id}', function(Request $request, Response $response){
+$app->delete('/api/usuarios/delete/{id}', function(Request $request, Response $response){
     $id = $request->getAttribute('id');
 
-    $sql = "DELETE FROM customers WHERE id = $id";
+    $sql = "DELETE FROM usuarios WHERE id_usuarios = $id";
 
     try{
         // Get DB Object
@@ -155,7 +111,7 @@ $app->delete('/api/customer/delete/{id}', function(Request $request, Response $r
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $db = null;
-        echo '{"notice": {"text": "Customer Deleted"}';
+        echo '{"notice": {"text": "Usuario eliminado"}';
     } catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
