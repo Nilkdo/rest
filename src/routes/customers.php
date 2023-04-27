@@ -63,11 +63,10 @@ $app->post('/api/usuarios/add', function(Request $request, Response $response){
     $first_name = $request->getParam('nombre');
     $last_name = $request->getParam('apellido');
     $phone = $request->getParam('telefono');
-    $email = $request->getParam('email');
     $address = $request->getParam('direccion');
     $city = $request->getParam('ciudad');
 
-    $sql = "INSERT INTO usuarios (id_usuarios,cedula,nombre,apellido,telefono,email,direccion,ciudad') VALUES
+    $sql = "INSERT INTO usuarios (id_usuarios,cedula,nombre,apellido,telefono,direccion,ciudad') VALUES
     (:nombre,:apellido,:telefono,:email,:direccion,:ciudad)";
 
     try{
@@ -83,7 +82,6 @@ $app->post('/api/usuarios/add', function(Request $request, Response $response){
         $stmt->bindParam(':nombre', $first_name);
         $stmt->bindParam(':apellido',  $last_name);
         $stmt->bindParam(':telefono',      $phone);
-        $stmt->bindParam(':email',      $email);
         $stmt->bindParam(':direccion',    $address);
         $stmt->bindParam(':ciudad',       $city);
 
