@@ -67,7 +67,7 @@ $app->post('/api/usuarios/add', function(Request $request, Response $response){
     $city = $request->getParam('ciudad');
 
     $sql = "INSERT INTO usuarios (id_usuarios,cedula,nombre,apellido,telefono,direccion,ciudad') VALUES
-    (:nombre,:apellido,:telefono,:email,:direccion,:ciudad)";
+    (:id_usuarios,:cedula,:nombre,:apellido,:telefono,:email,:direccion,:ciudad)";
 
     try{
         // Get DB Object
